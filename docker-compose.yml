@@ -1,0 +1,51 @@
+services:
+  prepare-env:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.bigdl-workflow
+    command:
+      - /usr/bin/bash
+      - -c
+      - |
+        rm -f ml-100k.zip
+        rm -rf ml-100k
+        wget https://files.grouplens.org/datasets/movielens/ml-100k.zip
+        unzip ml-100k.zip
+    environment: 
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    privileged: true
+    image: bigdl_bigdl-workflow:latest
+    volumes: 
+      - $PWD:/workspace
+    working_dir: /workspace/python/orca/tutorial/NCF
+  bigdl-workflow:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.bigdl-workflow
+    depends_on:
+      prepare-env:
+        condition: service_completed_successfully
+    command:
+      - /usr/bin/bash
+      - -c
+      - |
+        echo "Start distributed training"
+        python tf_train_spark_dataframe.py --dataset ml-100k
+        echo "Start distributed inference"
+        python tf_predict_spark_dataframe.py --dataset ml-100k
+    environment: 
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    privileged: true
+    volumes: 
+      - $PWD:/workspace
+    working_dir: /workspace/python/orca/tutorial/NCF

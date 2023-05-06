@@ -1,0 +1,45 @@
+# BigDL Distributed Training/Inference Workflow
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bigdl-ncf
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: bigdl-workflow
+        image: intelanalytics/bigdl-orca:latest
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /output
+          name: nfs-storage
+        env:
+        - name: http_proxy
+          value: {{ .Values.httpProxy }}
+        - name: https_proxy
+          value: {{ .Values.httpsProxy }}
+        - name: no_proxy
+          value: {{ .Values.noProxy }}
+        command: ["/bin/bash", "-c"]
+        args:
+          - mkdir /output/bigdl-ncf;
+            cd /output/bigdl-ncf;
+            echo "Download dataset";
+            wget "https://files.grouplens.org/datasets/movielens/ml-100k.zip" -O ml-100k.zip;
+            unzip -o ./ml-100k.zip;
+            cd -;
+            echo "Install required software";
+            git clone "https://github.com/intel-analytics/BigDL.git";
+            pip install tensorflow==2.9.0;
+            cd BigDL/python/orca/tutorial/NCF;
+            echo "Start distributed training";
+            python ./tf_train_spark_dataframe.py --dataset ml-100k --data_dir /output/bigdl-ncf --model_dir /output/bigdl-ncf;
+            echo "Start distributed inference";
+            python ./tf_predict_spark_dataframe.py --dataset ml-100k --data_dir /output/bigdl-ncf --model_dir /output/bigdl-ncf;
+            echo "BigDL NCF workflow has completed successfully";
+            exit;
+      volumes:
+      - name: nfs-storage
+        persistentVolumeClaim:
+          claimName: nfsvolumeclaim
