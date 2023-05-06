@@ -1,0 +1,4 @@
+FROM intelanalytics/bigdl-orca:latest
+RUN echo "Install required packages" && \
+    source activate bigdl && \
+    pip install tensorflow==2.9.0

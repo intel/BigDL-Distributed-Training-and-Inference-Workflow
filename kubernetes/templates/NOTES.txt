@@ -1,0 +1,17 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+Get the list of pods by executing:
+
+  kubectl get pods -l job-name=bigdl-ncf
+
+A pod name will be returned. BigDL workflow logs can be accessed by the following command:
+
+  kubectl logs <pod-name>
+
+Uninstall:
+
+  helm delete {{ .Release.Name }}
