@@ -1,5 +1,7 @@
 # Distributed Training & Inference Workflows using BigDL 
 
+## Introduction
+
 Usually one would take many efforts to develop distributed training and inference pipelines to handle large datasets in production.
 With the adoption of BigDL, AI workflows written in Python notebooks running on a single laptop can be seamlessly
 scaled out across large clusters so as to process distributed big data.
@@ -25,7 +27,7 @@ For more details, visit the BigDL [GitHub repository](https://github.com/intel-a
 
 BigDL and the workflow example shown below could run widely on Intel® Xeon® series processors.
 
-|| Recommended Hardware         |
+|| Supported Hardware         |
 |---| ---------------------------- |
 |CPU| Intel® Xeon® Scalable processors|
 |Memory|>10G|
