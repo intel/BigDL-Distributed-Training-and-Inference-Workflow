@@ -1,14 +1,15 @@
 # Distributed Training & Inference Workflows using BigDL 
 
-Learn to use BigDL to easily build and seamlessly scale distributed training and inference workflows
+## Introduction
+
+Developing distributed training and inference pipelines to handle large datasets in production can be a complex and time-consuming process. However, by adopting BigDL, you can seamlessly scale AI workflows written in Python notebooks on a single laptop across large clusters to process distributed big data.
+
+Learn to use BigDL, to easily build and seamlessly scale distributed training and inference workflows
 for TensorFlow and PyTorch. This page takes the recsys workflows for Neural Collaborative Filtering (NCF) as an example.
 
 Check out more workflow examples and reference implementations in the [Developer Catalog](https://developer.intel.com/aireferenceimplementations).
 
-## Overview
-Usually one would take many efforts to develop distributed training and inference pipelines to handle large datasets in production.
-With the adoption of BigDL, AI workflows written in Python notebooks running on a single laptop can be seamlessly
-scaled out across large clusters so as to process distributed big data.
+## Solution Technical Overview
 
 Highlights and benefits of BigDL are as follows:
 
@@ -20,11 +21,11 @@ Highlights and benefits of BigDL are as follows:
 For more details, visit the BigDL [GitHub repository](https://github.com/intel-analytics/BigDL/tree/main) and
 [documentation page](https://bigdl.readthedocs.io/en/latest/).
 
-## Hardware Requirements
+## Validated Hardware Requirements
 
 BigDL and the workflow example shown below could run widely on Intel® Xeon® series processors.
 
-|| Recommended Hardware         |
+|| Supported Hardware         |
 |---| ---------------------------- |
 |CPU| Intel® Xeon® Scalable processors|
 |Memory|>10G|
