@@ -38,9 +38,9 @@ services:
       - -c
       - |
         echo "Start distributed training"
-        python tf_train_spark_dataframe.py --dataset ml-100k
+        python pytorch_train_spark_dataframe.py --dataset ml-100k
         echo "Start distributed inference"
-        python tf_predict_spark_dataframe.py --dataset ml-100k
+        python pytorch_predict_spark_dataframe.py --dataset ml-100k
     environment: 
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
