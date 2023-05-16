@@ -116,7 +116,7 @@ docker run -a stdout \
 
 Run these commands to install additional software used for the workflow in the Docker container:
 ```
-pip install tensorflow==2.9.0
+pip install torch torchmetrics==0.10.0 tqdm
 ```
 
 
@@ -139,7 +139,7 @@ Run these commands to set up the workflow's ``conda`` environment and install re
 conda create -n bigdl python=3.9 --yes
 conda activate bigdl
 pip install --pre --upgrade bigdl-orca-spark3
-pip install tensorflow==2.9.0
+pip install torch torchmetrics==0.10.0 tqdm
 ```
 
 ---
@@ -160,14 +160,14 @@ unzip ml-100k.zip
 
 
 #### 2. Run Workflow
-The workflow uses Spark DataFrame to process the movielens data and defines the [Neural Collaborative Filtering](https://arxiv.org/abs/1708.05031) model in TensorFlow. Use these commands to run the workflow:
+The workflow uses Spark DataFrame to process the movielens data and defines the [Neural Collaborative Filtering](https://arxiv.org/abs/1708.05031) model in PyTorch. Use these commands to run the workflow:
 - Distributed training:
 ```
-python tf_train_spark_dataframe.py --dataset ml-100k
+python pytorch_train_spark_dataframe.py --dataset ml-100k
 ```
 - Distributed inference:
 ```
-python tf_predict_spark_dataframe.py --dataset ml-100k
+python pytorch_predict_spark_dataframe.py --dataset ml-100k
 ```
 
 ### Run Via Scripts
@@ -204,42 +204,50 @@ ll NCF_model.h5
 ```
 Check out the logs of the console for training and inference results:
 
-- tf_train_spark_dataframe.py:
+- pytorch_train_spark_dataframe.py:
 ```
 Train results:
-verbose: 1
-epochs: 2
-steps: 40
-loss: [0.43995094299316406, 0.3661007285118103]
-accuracy: [0.7953540086746216, 0.83966064453125]
-auc: [0.7579973936080933, 0.8532146215438843]
-precision: [0.3079235553741455, 0.6916240453720093]
-recall: [0.017480555921792984, 0.3596118092536926]
-val_loss: [0.3642280697822571, 0.3102317750453949]
-val_accuracy: [0.8291406035423279, 0.865966796875]
-val_auc: [0.855850875377655, 0.8976992964744568]
-val_precision: [0.7450749278068542, 0.7225849628448486]
-val_recall: [0.21683736145496368, 0.5314843058586121]
+num_samples: 400052
+val_num_samples: 99948
+epoch: 1.0
+batch_count: 40.0
+train_loss: 0.43055336376741554
+last_train_loss: 0.3613356734713937
+val_accuracy: 0.7996858358383179
+val_precision: 1.0
+val_recall: 0.00029959555831737816
+val_loss: 0.36779773215466566
+
+num_samples: 400052
+val_num_samples: 99948
+epoch: 2.0
+batch_count: 40.0
+train_loss: 0.3421447095760922
+last_train_loss: 0.2986053046780199
+val_accuracy: 0.863288938999176
+val_precision: 0.7882054448127747
+val_recall: 0.4344634711742401
+val_loss: 0.3191395945899022
 
 Evaluation results:
-validation_loss: 0.3142370283603668
-validation_accuracy: 0.8649218678474426
-validation_auc: 0.8953894376754761
-validation_precision: 0.7280181050300598
-validation_recall: 0.5282735824584961
+num_samples: 99948
+Accuracy: 0.8642994165420532
+Precision: 0.7878707647323608
+Recall: 0.44436147809028625
+val_loss: 0.3183932923312301
 ```
-- tf_predict_spark_dataframe.py:
+- pytorch_predict_spark_dataframe.py:
 ```
-+----+----+-----+-------+------+----------+--------------------+--------+--------------------+
-|item|user|label|zipcode|gender|occupation|                 age|category|          prediction|
-+----+----+-----+-------+------+----------+--------------------+--------+--------------------+
-|   1| 627|  0.0|    172|     1|         5|[0.25757575757575...|     102| [0.841558039188385]|
-|   1| 697|  1.0|     74|     1|         2|[0.2727272727272727]|     102|[0.6905139088630676]|
-|   3| 500|  1.0|    705|     1|         4|[0.3181818181818182]|       8|[0.31478825211524...|
-|   5| 815|  0.0|    314|     1|         2|[0.3787878787878788]|      30|[0.27323466539382...|
-|  16| 682|  0.0|    477|     1|         6|[0.24242424242424...|       3|[0.10835579037666...|
-+----+----+-----+-------+------+----------+--------------------+--------+--------------------+
-only showing top 5 rows
+Prediction results of the first 5 rows:
++----+----+-----+-------+------+----------+--------------------+--------+-------------------+
+|item|user|label|zipcode|gender|occupation|                 age|category|         prediction|
++----+----+-----+-------+------+----------+--------------------+--------+-------------------+
+|   1| 585|  0.0|    772|     1|         7|[0.9393939393939394]|     102|-2.0137369632720947|
+|   9| 864|  1.0|    529|     1|         6|[0.30303030303030...|       1| 1.2248330116271973|
+|  11| 778|  1.0|    117|     1|         1|[0.4090909090909091]|      24|  1.032607078552246|
+|  12| 175|  1.0|    280|     2|        10|[0.2878787878787879]|      24| 2.0041821002960205|
+|  13| 189|  1.0|    719|     1|        11|[0.3787878787878788]|       2| 0.5711498260498047|
++----+----+-----+-------+------+----------+--------------------+--------+-------------------+
 ```
 
 ---
