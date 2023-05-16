@@ -31,12 +31,12 @@ spec:
             cd -;
             echo "Install required software";
             git clone "https://github.com/intel-analytics/BigDL.git";
-            pip install tensorflow==2.9.0;
+            pip install torch torchmetrics==0.10.0 tqdm;
             cd BigDL/python/orca/tutorial/NCF;
             echo "Start distributed training";
-            python ./tf_train_spark_dataframe.py --dataset ml-100k --data_dir /output/bigdl-ncf --model_dir /output/bigdl-ncf;
+            python ./pytorch_train_spark_dataframe.py --dataset ml-100k --data_dir /output/bigdl-ncf --model_dir /output/bigdl-ncf;
             echo "Start distributed inference";
-            python ./tf_predict_spark_dataframe.py --dataset ml-100k --data_dir /output/bigdl-ncf --model_dir /output/bigdl-ncf;
+            python ./pytorch_predict_spark_dataframe.py --dataset ml-100k --data_dir /output/bigdl-ncf --model_dir /output/bigdl-ncf;
             echo "BigDL NCF workflow has completed successfully";
             exit;
       volumes:
