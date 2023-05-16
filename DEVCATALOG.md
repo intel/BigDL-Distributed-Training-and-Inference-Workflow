@@ -200,7 +200,7 @@ Check out the processed data, saved model and predictions of the workflow:
 ll train_processed_dataframe.parquet
 ll test_processed_dataframe.parquet
 ll test_predictions_dataframe.parquet
-ll NCF_model.h5
+ll NCF_model
 ```
 Check out the logs of the console for training and inference results:
 
