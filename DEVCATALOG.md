@@ -46,6 +46,12 @@ The architecture above illustrates how BigDL can build end-to-end, distributed a
 
 ## Get Started
 
+We will use `~/work` as our working directory:
+
+```bash
+export WORKSPACE=~/work
+```
+
 ### 1. Prerequisites
 
 You are highly recommended to use the toolkit under the following system and software settings:
@@ -59,7 +65,7 @@ directory. This step downloads the example scripts in BigDL to demonstrate the w
 Follow the steps in the next section to easily install BigDL via [Docker](#31-install-from-docker) or [pip](#32-install-from-pypi-on-bare-metal).
 
 ```
-mkdir ~/work && cd ~/work
+mkdir -p $WORKSPACE && cd $WORKSPACE
 git clone https://github.com/intel-analytics/BigDL.git
 cd BigDL
 ```
