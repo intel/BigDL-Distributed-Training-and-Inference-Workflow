@@ -180,7 +180,7 @@ chmod 700 get_helm.sh && \
 helm upgrade --install bigdl-workflow kubernetes/
 ```
 
-#### Clean Up the Helm Chart
+#### 3. Clean Up the Helm Chart after Completion
 ```
 helm delete bigdl-workflow
 ```
