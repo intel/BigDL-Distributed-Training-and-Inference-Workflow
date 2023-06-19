@@ -46,6 +46,12 @@ The architecture above illustrates how BigDL can build end-to-end, distributed a
 
 ## Get Started
 
+We will use `~/work` as our working directory:
+
+```bash
+export WORKSPACE=~/work
+```
+
 ### 1. Prerequisites
 
 You are highly recommended to use the toolkit under the following system and software settings:
@@ -56,24 +62,36 @@ You are highly recommended to use the toolkit under the following system and sof
 Create a working directory for the example workflow of BigDL and clone the [Main
 Repository](https://github.com/intel-analytics/BigDL) repository into your working
 directory. This step downloads the example scripts in BigDL to demonstrate the workflow.
-Follow the steps in the next section to easily install BigDL via [Docker](#31-install-from-docker) or [pip](#32-install-from-pypi-on-bare-metal).
+Follow the steps in the next section to easily install BigDL via Docker or pip.
 
 ```
-mkdir ~/work && cd ~/work
+mkdir -p $WORKSPACE && cd $WORKSPACE
 git clone https://github.com/intel-analytics/BigDL.git
 cd BigDL
 ```
 
-### 3. Installation
-You can install BigDL either using our provided [Docker image](#31-install-from-docker) (recommended way) or on [bare metal](#32-install-from-pypi-on-bare-metal) according to your environment and preference.
+### 3. Download the Datasets
 
-If you wish to run with `docker compose` or `helm`, we also provide you with easy scripts which lanuch the workflow automatically. After setting up Docker, you can just skip the remaining part of this section and directly go to [docker compose](#1-run-with-docker-compose) or [helm on k8s](#2-run-with-helm-on-k8s) instructions.
+This workflow uses the [ml-100k dataset](https://grouplens.org/datasets/movielens/100k/) of [MovieLens](https://movielens.org/). 
 
-#### 3.1 Install from Docker
+```
+cd python/orca/tutorial/NCF
+wget https://files.grouplens.org/datasets/movielens/ml-100k.zip
+unzip ml-100k.zip
+```
+
+## Supported Runtime Environment
+The workflow uses Spark DataFrame to process the movielens data and defines the [Neural Collaborative Filtering](https://arxiv.org/abs/1708.05031) model in PyTorch. You can execute the reference workflow using the following environments:
+* Docker
+* Helm 
+* Bare metal
+
+### Run Using Docker
+
 Follow these instructions to set up and run our provided Docker image.
-For running the training workflow on bare metal, see the [bare metal instructions](#32-install-from-pypi-on-bare-metal).
+For running the training workflow on bare metal, see the [bare metal instructions](#run-using-bare-metal).
 
-**a. Set Up Docker Engine**
+#### Set Up Docker Engine
 
 You'll need to install Docker Engine on your development system.
 Note that while **Docker Engine** is free to use, **Docker Desktop** may require
@@ -88,14 +106,36 @@ for Azure):
 - [Compute targets in Azure Machine Learning](https://learn.microsoft.com/en-us/azure/machine-learning/concept-compute-target)
 - [Virtual Machine Products Available in Your Region](https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/?products=virtual-machines&regions=us-east)
 
-**b. Set Up Docker Image**
+#### Setup Docker Compose
+Ensure you have Docker Compose installed on your machine. If you don't have this tool installed, consult the official [Docker Compose installation documentation](https://docs.docker.com/compose/install/linux/#install-the-plugin-manually).
+
+```bash
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p $DOCKER_CONFIG/cli-plugins
+curl -SL https://github.com/docker/compose/releases/download/v2.7.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+docker compose version
+```
+
+#### Set Up Docker Image
 
 Pull the provided Docker image:
 ```
 docker pull intelanalytics/bigdl-orca:latest
 ```
 
-**c. Create Docker Container**
+#### Run Pipeline with Docker Compose 
+```bash
+docker compose up bigdl-workflow --build
+```
+
+Stop the containers created by docker compose and remove them after the completion of the workflow.
+
+```bash
+docker compose down
+```
+
+#### Run Docker Image in an Interactive Environment
 
 Create the Docker container for BigDL using the ``docker run`` command, as shown below. If your environment requires a proxy to access the Internet, export your
 development system's proxy settings to the Docker environment by adding `--env http_proxy=${http_proxy}` when you create the docker container.
@@ -112,55 +152,12 @@ docker run -a stdout \
   bash
 ```
 
-**d. Install Packages in Docker Container**
-
 Run these commands to install additional software used for the workflow in the Docker container:
 ```
 pip install torch torchmetrics==0.10.0 tqdm
 ```
 
-
-#### 3.2 Install from Pypi on Bare Metal
-Follow these instructions to set up and run this workflow on your own development
-system. For running the training workflow with a provided Docker image, see the [Docker
- instructions](#31-install-from-docker).
-
-
-**a. Set Up System Software**
-
-Our examples use the ``conda`` package and environment on your local computer.
-If you don't have ``conda`` installed, see the [Conda Linux installation
-instructions](https://docs.conda.io/projects/conda/en/stable/user-guide/install/linux.html).
-
-**b. Install Packages in Conda Environment**
-
-Run these commands to set up the workflow's ``conda`` environment and install required software:
-```
-conda create -n bigdl python=3.9 --yes
-conda activate bigdl
-pip install --pre --upgrade bigdl-orca-spark3
-pip install torch torchmetrics==0.10.0 tqdm
-```
-
----
-
-## How To Run
-
-### Manual Run
-Follow these instructions to run the workflow by hand. If you wish to lanuch the workflow via scripts, see [docker compose](#1-run-with-docker-compose) or [helm on k8s](#2-run-with-helm-on-k8s) instructions.
-#### 1. Download the Datasets
-
-This workflow uses the [ml-100k dataset](https://grouplens.org/datasets/movielens/100k/) of [MovieLens](https://movielens.org/).
-
-```
-cd python/orca/tutorial/NCF
-wget https://files.grouplens.org/datasets/movielens/ml-100k.zip
-unzip ml-100k.zip
-```
-
-
-#### 2. Run Workflow
-The workflow uses Spark DataFrame to process the movielens data and defines the [Neural Collaborative Filtering](https://arxiv.org/abs/1708.05031) model in PyTorch. Use these commands to run the workflow:
+Use these commands to run the workflow:
 - Distributed training:
 ```
 python pytorch_train_spark_dataframe.py --dataset ml-100k
@@ -170,31 +167,58 @@ python pytorch_train_spark_dataframe.py --dataset ml-100k
 python pytorch_predict_spark_dataframe.py --dataset ml-100k
 ```
 
-### Run Via Scripts
-We offer two options to automatically launch the distribute training and inference workflow:
-+ Docker Compose
-+ Helm on K8s
-
-#### 1. Run with `docker compose`
-
+### Run Using Helm
+#### 1. Install Helm
+- Install [Helm](https://helm.sh/docs/intro/install/)
 ```bash
-docker compose up bigdl-workflow --build
-
-# After completion
-docker compose down
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
+chmod 700 get_helm.sh && \
+./get_helm.sh
 ```
-
-#### 2. Run with `helm` on K8s:
-
-Follow the official instructions to install [helm](https://helm.sh/docs/intro/install/) first before running the following commands on your Kubernetes cluster:
+#### 2. Launch with Helm
 ```bash
 helm upgrade --install bigdl-workflow kubernetes/
+```
 
-# After completion
+#### Clean Up the Helm Chart
+```
 helm delete bigdl-workflow
 ```
 
-## Expected Output
+### Run Using Bare Metal
+Follow these instructions to set up and run this workflow on your own development
+system. For running the training workflow with a provided Docker image, see the [Docker
+ instructions](#31-install-from-docker).
+
+
+#### Set Up System Software
+
+Our examples use the ``conda`` package and environment on your local computer.
+If you don't have ``conda`` installed, see the [Conda Linux installation
+instructions](https://docs.conda.io/projects/conda/en/stable/user-guide/install/linux.html).
+
+#### Set Up Workflow
+
+Run these commands to set up the workflow's ``conda`` environment and install required software:
+```
+conda create -n bigdl python=3.9 --yes
+conda activate bigdl
+pip install --pre --upgrade bigdl-orca-spark3
+pip install torch torchmetrics==0.10.0 tqdm
+```
+
+#### Run Workflow
+Use these commands to run the workflow:
+- Distributed training:
+```
+python pytorch_train_spark_dataframe.py --dataset ml-100k
+```
+- Distributed inference:
+```
+python pytorch_predict_spark_dataframe.py --dataset ml-100k
+```
+
+### Expected Output
 Check out the processed data, saved model and predictions of the workflow:
 ```
 ll train_processed_dataframe.parquet
