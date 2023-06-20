@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Developing distributed training and inference pipelines to handle large datasets in production can be a complex and time-consuming process. However, by adopting BigDL, you can seamlessly scale AI workflows written in Python notebooks on a single laptop across large clusters to process distributed big data.
+Developing distributed training and inference pipelines to handle large datasets in production can be a complex and time-consuming process. However, by adopting BigDL, you can seamlessly scale AI workflows written in Python scripts or notebooks on a single laptop across large clusters to process distributed big data.
 
-Learn to use BigDL, to easily build and seamlessly scale distributed training and inference workflows
+Learn to use BigDL to easily build and seamlessly scale distributed training and inference workflows
 for TensorFlow and PyTorch. This page takes the recsys workflows for Neural Collaborative Filtering (NCF) as an example.
 
 Check out more workflow examples and reference implementations in the [Developer Catalog](https://developer.intel.com/aireferenceimplementations).
@@ -98,7 +98,7 @@ Note that while **Docker Engine** is free to use, **Docker Desktop** may require
 you to purchase a license.  See the [Docker Engine Server installation
 instructions](https://docs.docker.com/engine/install/#server) for details.
 
-If the Docker image is run on a cloud service, mention they may also need
+If the Docker image is run on a cloud service, you may also need
 credentials to perform training and inference related operations (such as these
 for Azure):
 - [Set up the Azure Machine Learning Account](https://azure.microsoft.com/en-us/free/machine-learning)
