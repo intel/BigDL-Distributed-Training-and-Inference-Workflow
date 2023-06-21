@@ -280,6 +280,8 @@ Prediction results of the first 5 rows:
 Now you have successfully tried the recsys workflows of BigDL to build an end-to-end pipeline for Neural Collaborative Filtering model.
 You can continue to try other use cases provided in BigDL or build the training and inference workflows on your own dataset!
 
+For your own dataset, you may first prepare your data in csv or other formats, and then follow the implementation [here](https://github.com/intel-analytics/BigDL/blob/main/python/orca/tutorial/NCF/process_spark_dataframe.py) to read and process the data as Spark DataFrames or other [data types](https://bigdl.readthedocs.io/en/latest/doc/Orca/Overview/data-parallel-processing.html) supported by BigDL for distributed training and inference.
+
 ## Learn More
 For more information about BigDL distributed training and inference workflows or to read about other relevant workflow
 examples, see these guides and software resources:
