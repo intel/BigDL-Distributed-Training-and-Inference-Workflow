@@ -67,7 +67,6 @@ Follow the steps in the next section to easily install BigDL via Docker or pip.
 ```
 mkdir -p $WORKSPACE && cd $WORKSPACE
 git clone https://github.com/intel-analytics/BigDL.git
-cd BigDL
 ```
 
 ### 3. Download the Datasets
@@ -75,7 +74,7 @@ cd BigDL
 This workflow uses the [ml-100k dataset](https://grouplens.org/datasets/movielens/100k/) of [MovieLens](https://movielens.org/). 
 
 ```
-cd python/orca/tutorial/NCF
+cd $WORKSPACE/BigDL/python/orca/tutorial/NCF
 wget https://files.grouplens.org/datasets/movielens/ml-100k.zip
 unzip ml-100k.zip
 ```
