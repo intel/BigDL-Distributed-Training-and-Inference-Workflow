@@ -1,4 +1,4 @@
-FROM intelanalytics/bigdl-orca:latest
+FROM intelanalytics/bigdl-orca:2.3.0
 RUN echo "Install required packages" && \
     source activate bigdl && \
     pip install torch==1.7.1 torchmetrics==0.10.0 tqdm==4.65.0
