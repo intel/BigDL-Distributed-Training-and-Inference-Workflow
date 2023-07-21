@@ -153,7 +153,7 @@ docker run -a stdout \
 
 Run these commands to install additional software used for the workflow in the Docker container:
 ```
-pip install torch torchmetrics==0.10.0 tqdm
+pip install torch==1.7.1 torchmetrics==0.10.0 tqdm==4.65.0
 ```
 
 Use these commands to run the workflow:
@@ -202,8 +202,8 @@ Run these commands to set up the workflow's ``conda`` environment and install re
 ```
 conda create -n bigdl python=3.9 --yes
 conda activate bigdl
-pip install --pre --upgrade bigdl-orca-spark3
-pip install torch torchmetrics==0.10.0 tqdm
+pip install bigdl-orca-spark3==2.3.0
+pip install torch==1.7.1 torchmetrics==0.10.0 tqdm==4.65.0
 ```
 
 #### Run Workflow
